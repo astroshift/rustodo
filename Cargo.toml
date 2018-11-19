@@ -1,0 +1,12 @@
+[package]
+authors = ["Dan Kulhanek <dank.work@hotmail.com>"]
+categories = ["command-line-utilities"]
+homepage = "https://github.com/astroshift/rustodo"
+license = "MIT"
+name = "rustodo"
+readme = "README.md"
+repository = "https://github.com/astroshift/rustodo"
+version = "1.0.0"
+
+[dependencies]
+chrono = "0.4"
