@@ -11,7 +11,8 @@ use std::process;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let _conf = run(&args).unwrap_or_else(|err|    {
+    
+    run(&args).unwrap_or_else(|err| {
         eprintln!("Problem parsing arguments: {}", err);
         process::exit(1);
     });
@@ -21,9 +22,9 @@ fn run(args: &[String]) -> Result<(), &'static str> {
     let mut home_path = String::new();
     let path = String::from("/.config/todo/entrys.sav");
 
-    let _hv = match env::var("HOME") {
-        Ok(_hv) => home_path.push_str(&_hv),
-        Err(_e) => panic!("Error: {}", _e),
+    match env::var("HOME") {
+        Ok(hv) => home_path.push_str(&hv),
+        Err(e) => panic!("Error: {}", e),
     };
 
     home_path.push_str(&path);
@@ -36,8 +37,8 @@ fn run(args: &[String]) -> Result<(), &'static str> {
 
         if args.len() == 2 {
             match args[1].as_ref() {
-                "-l" => list_entrys(home_path),
-                "-c" => clear_entrys(home_path),
+                "-l" => list_entrys(&home_path),
+                "-c" => clear_entrys(&home_path),
                 "-h" => help(), 
                 _ => return Err("Option not recognized or program misuse, read -h for help"),
             }
@@ -45,10 +46,10 @@ fn run(args: &[String]) -> Result<(), &'static str> {
         else if args.len() == 3 {
             let item = &args[2];
             match args[1].as_ref() {
-                "-a" => add_entry(home_path, item, date),
-                "-f" => ufin_entry(home_path, item, true),
-                "-u" => ufin_entry(home_path, item, false),
-                "-r" => remove_entry(home_path, item),
+                "-a" => add_entry(&home_path, item, &date),
+                "-f" => ufin_entry(&home_path, item, true),
+                "-u" => ufin_entry(&home_path, item, false),
+                "-r" => remove_entry(&home_path, item),
                 _ => return Err("Option not recognized or program misuse, read-h for help"),
             }
         }

@@ -5,8 +5,18 @@ use std::io;
 use std::io::prelude::*;
 use std::io::ErrorKind;
 
-pub fn add_entry(_path: String, _item: &str, _date: String) {
-    let dir_s = _path.split("/");
+
+/// Writes an entry to a file.
+///
+/// # Examples
+/// 
+/// let path = "/home/user/writefile";
+/// let date = "(13:33:56 2018-11-20)";
+///
+/// add_entry(path, "String to add", date);
+
+pub fn add_entry(_path: &str, _item: &str, _date: &str) {
+    let dir_s = _path.split('/');
     let dir_v: Vec<&str> = dir_s.collect();    
     let mut dir = String::new();
 
@@ -21,21 +31,15 @@ pub fn add_entry(_path: String, _item: &str, _date: String) {
         x += 1;
     }
 
-    let _cdir = fs::create_dir_all(dir);
-    let mut _cdir = match _cdir {
-        Ok(_cdir) => _cdir,
+    match fs::create_dir_all(dir) {
+        Ok(cdir) => cdir,
         Err(e) => match e.kind() {
             ErrorKind::AlreadyExists => print!(""),
             other_error => panic!("There was a problem creating the directory: {:?}", other_error),
         },
     };
 
-    let file = OpenOptions::new()
-        .write(true)
-        .append(true)
-        .open(&_path);
-
-    let mut file = match file {
+    let mut file = match OpenOptions::new().write(true).append(true).open(&_path) {
         Ok(file) => file,
         Err(e) => match e.kind() {
             ErrorKind::NotFound => match File::create(&_path) {
@@ -46,23 +50,25 @@ pub fn add_entry(_path: String, _item: &str, _date: String) {
         },
     };
 
-    let mut line = String::new();
-    line.push_str("(_): ");
-    line.push_str(&_item);
-    line.push_str(" (");
-    line.push_str(&_date);
-    line.push_str(")");
-
-    if let Err(e) = writeln!(file, "{}", line) {
+    if let Err(e) = writeln!(file, "(_): {} ({})", &_item, &_date) {
         eprintln!("Couldn't write to file {}", e);
     }
 }
 
-pub fn remove_entry(_path: String, _item: &str) {
+
+/// Removes an entry from a file that contains the specified item argument.
+///
+/// # Examples
+///
+/// let path = "/home/user/writefile";
+///
+/// remove_entry(path, "string");
+
+pub fn remove_entry(_path: &str, _item: &str) {
     let _lines = fs::read_to_string(&_path)
         .expect("Something went wrong reading the file");
 
-    let split = _lines.split("\n");
+    let split = _lines.split('\n');
 
     let vec: Vec<&str> = split.collect();
     let mut _nvec: Vec<String> = Vec::new();
@@ -87,7 +93,7 @@ pub fn remove_entry(_path: String, _item: &str) {
         let mut j = 0;
         while j < _nvec.len() {
             if j < _nvec.len() - 1 {
-                _nvec[j].push_str("\n");
+                _nvec[j].push('\n');
             }
 
             f.write_all(_nvec[j].as_bytes())
@@ -98,7 +104,19 @@ pub fn remove_entry(_path: String, _item: &str) {
     }
 }
 
-pub fn ufin_entry(_path: String, _item: &str, foru: bool) {
+
+/// Finish or unfinish an entry.
+///
+/// # Examples
+///
+/// let path = "/home/user/writefile";
+///
+/// let foru = true;
+/// If foru == true then function will finish entry, if false then will unfinish entry.
+///
+/// ufin_entry(path, "string in entry", foru);
+
+pub fn ufin_entry(_path: &str, _item: &str, foru: bool) {
     let _lines = fs::read_to_string(&_path)
         .expect("Something went wrong reading the file");   
     
@@ -111,7 +129,7 @@ pub fn ufin_entry(_path: String, _item: &str, foru: bool) {
         Err(e) => panic!("Error opening file: {}", e),    
     };
 
-    let split = _lines.split("\n");
+    let split = _lines.split('\n');
 
     let vec: Vec<&str> = split.collect();
     let mut _nvec: Vec<String> = Vec::new();
@@ -155,7 +173,15 @@ pub fn ufin_entry(_path: String, _item: &str, foru: bool) {
     }
 }
 
-pub fn clear_entrys(_path: String) {
+/// Clears all entrys in file, will ask before performing.
+///
+/// # Examples
+///
+/// let path = String::from("/home/user/writefile")
+///
+/// clear_entrys(path);
+
+pub fn clear_entrys(_path: &str) {
     print!("Are you sure you want to clear your todo list? (y/n): ");
     flushio();
 
@@ -165,13 +191,13 @@ pub fn clear_entrys(_path: String) {
         io::stdin().read_line(&mut yn)
             .expect("Failed to read line");
 
-        if yn.contains("Y") || yn.contains("y") {    
+        if yn.contains('Y') || yn.contains('y') {    
             File::create(&_path)
                 .expect("Couldn't clear file");
             println!("File cleared");
             break;
         }
-        else if yn.contains("N") || yn.contains("n") {
+        else if yn.contains('N') || yn.contains('n') {
             println!("File clear cancelled");
             break;
         }
