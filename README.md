@@ -4,7 +4,7 @@ Todo list CLI program written in Rust
 
 # Documentation
 
-Documentation will be available soon
+Official documentation will be available soon
 
 # General Information
 
