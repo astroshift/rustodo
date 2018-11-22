@@ -111,8 +111,8 @@ pub fn remove_entry(_path: &str, _item: &str) {
 ///
 /// let path = "/home/user/writefile";
 ///
+/// If foru == true then function will finish the specified entry, if false then will unfinish specified entry.
 /// let foru = true;
-/// If foru == true then function will finish entry, if false then will unfinish entry.
 ///
 /// ufin_entry(path, "string in entry", foru);
 
@@ -177,7 +177,7 @@ pub fn ufin_entry(_path: &str, _item: &str, foru: bool) {
 ///
 /// # Examples
 ///
-/// let path = String::from("/home/user/writefile")
+/// let path = "/home/user/writefile";
 ///
 /// clear_entrys(path);
 
