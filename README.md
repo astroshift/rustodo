@@ -1,16 +1,8 @@
 # rustodo
 
-Todo list CLI program written in Rust
+Todo list command line program written in Rust
 
-# Documentation
-
-Official documentation will be available soon
-
-# General Information
-
-This project is still a WIP so some features may still be underdeveloped or incomplete
-
-Examples:
+# Examples
 
 [![sample screenshot1](https://i.imgur.com/Yug9gJr.png)](https://i.imgur.com/Yug9gJr.png)
 
